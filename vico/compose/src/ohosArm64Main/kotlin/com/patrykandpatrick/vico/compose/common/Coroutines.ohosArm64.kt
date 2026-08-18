@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2026 by Patryk Goworowski and Patrick Michalik.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,30 +14,11 @@
  * limitations under the License.
  */
 
-import org.gradle.api.attributes.Attribute
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+package com.patrykandpatrick.vico.compose.common
 
-plugins {
-  `dokka-convention`
-  `publishing-convention`
-  id("com.android.library")
-  id("org.jetbrains.kotlin.android")
-  id("org.jetbrains.compose")
-  id("org.jetbrains.kotlin.plugin.compose")
-}
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
 
-android {
-  configure()
-  namespace = moduleNamespace
-}
-
-kotlin {
-  explicitApi()
-  compilerOptions { jvmTarget.set(JvmTarget.JVM_11) }
-}
-
-dependencies {
-  api(project(":vico:compose"))
-  implementation(libs.glanceAppWidget)
-  implementation(libs.uiTextAndroid)
-}
+internal actual val runBlocking: ((CoroutineContext, suspend CoroutineScope.() -> Unit) -> Unit)?
+  get() = ::runBlocking

@@ -15,26 +15,33 @@
  */
 
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   `dokka-convention`
   `publishing-convention`
-  id("com.android.kotlin.multiplatform.library")
-  alias(libs.plugins.composeMultiplatform)
+  id("com.android.library")
+  id("org.jetbrains.compose")
   id("org.jetbrains.kotlin.multiplatform")
   id("org.jetbrains.kotlin.plugin.compose")
 }
 
+android {
+  configure()
+  namespace = moduleNamespace
+}
+
 kotlin {
-  android {
-    configure()
-    namespace = moduleNamespace
-    withHostTest { isIncludeAndroidResources = true }
+  androidTarget {
+    compilerOptions { jvmTarget = JvmTarget.JVM_11 }
+    publishLibraryVariants("release")
   }
-  listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
-    target.binaries.framework {
-      baseName = project.name
-      isStatic = true
+  if (System.getProperty("os.name").contains("Mac", ignoreCase = true)) {
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
+      target.binaries.framework {
+        baseName = project.name
+        isStatic = true
+      }
     }
   }
   jvm("desktop")
@@ -47,7 +54,17 @@ kotlin {
     browser()
     binaries.executable()
   }
+  ohosArm64()
   sourceSets {
+    val webMain by creating {
+      dependsOn(commonMain.get())
+    }
+    val jsMain by getting {
+      dependsOn(webMain)
+    }
+    val wasmJsMain by getting {
+      dependsOn(webMain)
+    }
     commonMain.dependencies {
       implementation(libs.androidXAnnotation)
       implementation(libs.composeFoundation)
@@ -58,24 +75,7 @@ kotlin {
     }
     // Keep Kotlin test APIs in `commonTest` so target-specific test source sets inherit them.
     commonTest.dependencies { implementation(libs.kotlinTest) }
-    // MockK isn’t multiplatform, so host-side JVM tests get it here.
-    val androidHostTest by getting { dependencies { implementation(libs.mockK) } }
+    val androidUnitTest by getting { dependencies { implementation(libs.mockK) } }
   }
   explicitApi()
-}
-
-/*
- * Ensure `./gradlew test` includes this module’s test suite. In this module, the JVM-capable tests
- * live under Android host tests.
- */
-val testTask = tasks.findByName("test")
-
-if (testTask != null) {
-  testTask.dependsOn("testAndroidHostTest")
-} else {
-  tasks.register("test") {
-    group = LifecycleBasePlugin.VERIFICATION_GROUP
-    description = "Runs the vico-compose test suite on the JVM (Android host tests)."
-    dependsOn("testAndroidHostTest")
-  }
 }

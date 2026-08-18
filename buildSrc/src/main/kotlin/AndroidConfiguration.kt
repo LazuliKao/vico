@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryTarget
+import com.android.build.api.dsl.KotlinMultiplatformAndroidTarget
 import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.JavaVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -34,8 +34,7 @@ fun LibraryExtension.configure() {
   defaultConfig { minSdk = Versions.MIN_SDK }
 }
 
-fun KotlinMultiplatformAndroidLibraryTarget.configure() {
-  compilerOptions { jvmTarget.set(JvmTarget.JVM_11) }
+fun KotlinMultiplatformAndroidTarget.configure() {
   compileSdk = Versions.COMPILE_SDK
   minSdk = Versions.MIN_SDK
 }

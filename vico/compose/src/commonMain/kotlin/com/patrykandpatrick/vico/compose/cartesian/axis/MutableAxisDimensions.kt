@@ -17,10 +17,8 @@
 package com.patrykandpatrick.vico.compose.cartesian.axis
 
 import androidx.compose.ui.geometry.MutableRect
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 
 /** A mutable implementation of [AxisDimensions]. */
 public class MutableAxisDimensions : AxisDimensions {
-  override var lineBounds: MutableRect = MutableRect(Offset.Zero, Size.Zero)
+  override var lineBounds: MutableRect = MutableRect(0f, 0f, 0f, 0f)
 }

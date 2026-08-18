@@ -18,9 +18,7 @@ package com.patrykandpatrick.vico.compose.common.component
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.graphics.shadow.DropShadowPainter
-import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.patrykandpatrick.vico.compose.common.*
@@ -53,17 +51,11 @@ public open class ShapeComponent(
 
   protected val path: Path = Path()
 
-  private val shadowPainters: List<DropShadowPainter> = getShadowPainters(shadows)
-
   internal val effectiveStrokeFill: Fill
     get() = if (strokeFill.color.alpha == 0f) fill else strokeFill
 
   init {
     require(strokeThickness >= 0.dp) { "`strokeThickness` must be nonnegative." }
-  }
-
-  private fun getShadowPainters(shadows: List<Shadow>) = shadows.map {
-    DropShadowPainter(shape, it)
   }
 
   protected fun applyBrushes(size: Size) {
@@ -90,11 +82,12 @@ public open class ShapeComponent(
       val height = adjustedBottom - adjustedTop
       val outline = shape.createOutline(Size(width, height), layoutDirection, density)
       applyBrushes(Size(width, height))
-      if (shadowPainters.isNotEmpty()) {
-        with(mutableDrawScope) {
-          size = Size(width, height)
-          translate(adjustedLeft, adjustedTop) {
-            shadowPainters.forEach { with(it) { draw(size) } }
+      if (shadows.isNotEmpty()) {
+        shadows.forEach { shadow ->
+          canvas.withSave {
+            canvas.translate(adjustedLeft + shadow.offset.x, adjustedTop + shadow.offset.y)
+            val shadowPaint = Paint().apply { color = shadow.color }
+            canvas.drawOutline(outline, shadowPaint)
           }
         }
       }

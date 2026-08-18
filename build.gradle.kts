@@ -14,4 +14,27 @@
  * limitations under the License.
  */
 
-subprojects.forEach { it.tasks.withType<Test>().configureEach { useJUnitPlatform() } }
+subprojects {
+  tasks.withType<Test>().configureEach { useJUnitPlatform() }
+  configurations.all {
+    if (name.contains("desktop", ignoreCase = true) ||
+        name.contains("jvm", ignoreCase = true) ||
+        name.contains("wasm", ignoreCase = true) ||
+        name.contains("js", ignoreCase = true)) {
+      resolutionStrategy.eachDependency {
+        if (requested.group.startsWith("org.jetbrains.compose") && requested.version?.contains("KBA") == true) {
+          useVersion("1.6.1")
+        }
+        if (requested.group == "org.jetbrains.kotlinx" && requested.name.startsWith("kotlinx-coroutines") && requested.version?.contains("KBA") == true) {
+          useVersion("1.8.0")
+        }
+        if (requested.group == "org.jetbrains.kotlinx" && requested.name.startsWith("atomicfu") && requested.version?.contains("KBA") == true) {
+          useVersion("0.23.2")
+        }
+        if (requested.group == "androidx.annotation" && requested.name == "annotation" && requested.version?.contains("KBA") == true) {
+          useVersion("1.9.1")
+        }
+      }
+    }
+  }
+}

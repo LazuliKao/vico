@@ -16,4 +16,8 @@
 
 plugins { id("org.jetbrains.dokka") }
 
-dokka { dokkaPublications.configureEach { suppressInheritedMembers = true } }
+tasks.withType<org.jetbrains.dokka.gradle.DokkaTaskPartial>().configureEach {
+  dokkaSourceSets.configureEach {
+    suppressInheritedMembers.set(true)
+  }
+}

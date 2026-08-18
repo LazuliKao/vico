@@ -15,24 +15,31 @@
  */
 
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-  id("com.android.kotlin.multiplatform.library")
-  alias(libs.plugins.composeMultiplatformSample)
+  id("com.android.library")
+  id("org.jetbrains.compose")
   id("org.jetbrains.kotlin.multiplatform")
   id("org.jetbrains.kotlin.plugin.compose")
   kotlin("plugin.serialization")
 }
 
+android {
+  configure()
+  namespace = "com.patrykandpatrick.vico.sample.app"
+}
+
 kotlin {
-  android {
-    configure()
-    namespace = "com.patrykandpatrick.vico.sample.app"
+  androidTarget {
+    compilerOptions { jvmTarget = JvmTarget.JVM_11 }
   }
-  listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
-    iosTarget.binaries.framework {
-      baseName = "Sample"
-      isStatic = true
+  if (System.getProperty("os.name").contains("Mac", ignoreCase = true)) {
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+      iosTarget.binaries.framework {
+        baseName = "Sample"
+        isStatic = true
+      }
     }
   }
   jvm("desktop")
@@ -53,7 +60,7 @@ kotlin {
       implementation(libs.composeMaterialIcons)
       implementation(libs.composeNavigation)
       implementation(libs.composeUI)
-      implementation(libs.composeUIToolingPreview)
+      implementation(compose.components.uiToolingPreview)
       implementation(libs.kotlinDateTime)
       implementation(libs.lifecycleRuntime)
       implementation(project(":vico:compose"))

@@ -18,8 +18,9 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   id("com.android.application")
+  id("org.jetbrains.kotlin.android")
   alias(libs.plugins.screenshot)
-  alias(libs.plugins.composeMultiplatformSample)
+  id("org.jetbrains.compose")
   id("org.jetbrains.kotlin.plugin.compose")
 }
 
@@ -45,7 +46,7 @@ android {
   testOptions { screenshotTests { imageDifferenceThreshold = 0.01f } }
 }
 
-kotlin { compilerOptions { jvmTarget = JvmTarget.JVM_11 } }
+kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_11) } }
 
 dependencies {
   implementation(project(":sample:shared"))

@@ -1,36 +1,30 @@
 [versions]
-activity = "1.13.0"
-agp = "9.3.1"
-androidXAnnotation = "1.10.0"
-compose = "1.11.1"
-# The sample adopts Material 3 Expressive, available only in a 1.12.0-alpha Compose
-# release, which drags the sample’s Compose runtime up to 1.12.0-alpha02. The Compose
-# Gradle plugin bundles the Skia/skiko runtime for the web (and desktop) targets and must
-# match that runtime, or the app fails to link. The sample modules therefore apply the
-# Compose plugin at this version (`composeMultiplatformSample`), while the library modules
-# stay on the stable `compose` version (`composeMultiplatform`), keeping their published
-# dependencies alpha-free.
-composeSample = "1.12.0-rc01"
-composeMaterial3 = "1.9.0"
-composeMaterial3Expressive = "1.12.0-alpha03"
-composeMaterialIcons = "1.7.3"
-composeNavigation = "2.10.0-alpha02"
-coroutines = "1.11.0"
-dateTime = "0.8.0-0.6.x-compat"
-dokka = "2.2.0"
+activity = "1.9.3"
+agp = "8.5.2"
+androidXAnnotation = "1.8.0-KBA-001"
+compose = "1.6.1-KBA-007"
+composeSample = "1.6.1-KBA-007"
+composeMaterial3 = "1.6.1-KBA-007"
+composeMaterial3Expressive = "1.6.1-KBA-007"
+composeMaterialIcons = "1.6.11"
+composeNavigation = "2.8.0-alpha10"
+coroutines = "1.8.0-KBA-001"
+dateTime = "0.6.0"
+dokka = "1.9.20"
 glance = "1.1.1"
-jetpackComposeBom = "2026.08.00"
-kotlin = "2.4.10"
-lifecycleRuntime = "2.11.0"
-material = "1.14.0"
-mavenPublish = "0.37.0"
-mockK = "1.14.11"
+jetpackComposeBom = "2024.09.00"
+kotlin = "2.0.21-KBA-013"
+lifecycleRuntime = "2.8.4"
+material = "1.12.0"
+mavenPublish = "0.29.0"
+mockK = "1.13.11"
 screenshot = "0.0.1-alpha15"
-uiTextAndroid = "1.12.0"
+uiTextAndroid = "1.6.3"
 
 [libraries]
 activityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
 androidApplication = { group = "com.android.application", name = "com.android.application.gradle.plugin", version.ref = "agp" }
+androidLibrary = { group = "com.android.library", name = "com.android.library.gradle.plugin", version.ref = "agp" }
 androidKotlinMultiplatformLibrary = { group = "com.android.kotlin.multiplatform.library", name = "com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "agp" }
 androidXAnnotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidXAnnotation" }
 composeCompiler = { group = "org.jetbrains.kotlin.plugin.compose", name = "org.jetbrains.kotlin.plugin.compose.gradle.plugin", version.ref = "kotlin" }
@@ -40,6 +34,7 @@ composeMaterial = { group = "org.jetbrains.compose.material", name = "material",
 composeMaterial3 = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "composeMaterial3" }
 composeMaterial3Expressive = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "composeMaterial3Expressive" }
 composeMaterialIcons = { group = "org.jetbrains.compose.material", name = "material-icons-core", version.ref = "composeMaterialIcons" }
+composeMultiplatform = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "compose" }
 composeNavigation = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "composeNavigation" }
 composeRuntime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "compose" }
 composeUI = { group = "org.jetbrains.compose.ui", name = "ui", version.ref = "compose" }

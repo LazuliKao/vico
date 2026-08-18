@@ -180,8 +180,7 @@ protected constructor(
           min(bounds.top, layerBounds.top),
           lineRight,
           max(bounds.bottom, layerBounds.bottom),
-        ),
-        Path.Direction.Clockwise,
+        )
       )
 
       canvas.clipPath(clipPath)
@@ -401,8 +400,7 @@ protected constructor(
           min(bounds.top, layerBounds.top),
           lineRight,
           max(bounds.bottom, layerBounds.bottom),
-        ),
-        Path.Direction.Clockwise,
+        )
       )
       canvas.clipPath(clipPath)
 

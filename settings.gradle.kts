@@ -15,6 +15,11 @@
  */
 
 pluginManagement.repositories {
+  maven("https://mirrors.tencent.com/nexus/repository/maven-tencent")
+  maven("https://mirrors.tencent.com/nexus/repository/maven-public")
+  maven("https://maven.aliyun.com/repository/public/")
+  maven("https://maven.aliyun.com/repository/google/")
+  maven("https://maven.aliyun.com/repository/gradle-plugin/")
   google()
   gradlePluginPortal()
   mavenCentral()
@@ -23,6 +28,10 @@ pluginManagement.repositories {
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
   repositories {
+    maven("https://mirrors.tencent.com/nexus/repository/maven-tencent")
+    maven("https://mirrors.tencent.com/nexus/repository/maven-public")
+    maven("https://maven.aliyun.com/repository/public/")
+    maven("https://maven.aliyun.com/repository/google/")
     google()
     mavenCentral()
     mavenLocal()

@@ -170,20 +170,22 @@ private suspend fun PointerInputScope.detectTapGestures(
       } else {
         waitForUpOrCancellation()
       }
-    if (inputChange.isTap(down) && onTap(inputChange.position)) inputChange.consume()
+    if (isTap(inputChange, down) && onTap(inputChange.position)) inputChange.consume()
   }
 }
 
 @OptIn(ExperimentalContracts::class)
-context(pointerEventScope: AwaitPointerEventScope)
-private fun PointerInputChange?.isTap(firstDown: PointerInputChange): Boolean {
-  contract { returns(true).implies(this@isTap != null) }
-  if (this == null) return false
-  val longPressTimeoutMillis = pointerEventScope.viewConfiguration.longPressTimeoutMillis
-  val touchSlop = pointerEventScope.viewConfiguration.touchSlop
-  val isNotLongPress = uptimeMillis - firstDown.uptimeMillis < longPressTimeoutMillis
-  val isNotMove = (firstDown.position - position).getDistance() < touchSlop
-  return !pressed && previousPressed && isNotLongPress && isNotMove
+private fun AwaitPointerEventScope.isTap(
+  inputChange: PointerInputChange?,
+  firstDown: PointerInputChange,
+): Boolean {
+  contract { returns(true).implies(inputChange != null) }
+  if (inputChange == null) return false
+  val longPressTimeoutMillis = viewConfiguration.longPressTimeoutMillis
+  val touchSlop = viewConfiguration.touchSlop
+  val isNotLongPress = inputChange.uptimeMillis - firstDown.uptimeMillis < longPressTimeoutMillis
+  val isNotMove = (firstDown.position - inputChange.position).getDistance() < touchSlop
+  return !inputChange.pressed && inputChange.previousPressed && isNotLongPress && isNotMove
 }
 
 private fun Offset.fits(size: IntSize) = x >= 0f && x <= size.width && y >= 0f && y <= size.height

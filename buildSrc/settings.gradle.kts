@@ -15,6 +15,8 @@
  */
 
 pluginManagement.repositories {
+  maven("https://mirrors.tencent.com/nexus/repository/maven-tencent")
+  maven("https://mirrors.tencent.com/nexus/repository/maven-public")
   google()
   gradlePluginPortal()
   mavenCentral()
@@ -24,6 +26,8 @@ pluginManagement.repositories {
 dependencyResolutionManagement {
   repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
   repositories {
+    maven("https://mirrors.tencent.com/nexus/repository/maven-tencent")
+    maven("https://mirrors.tencent.com/nexus/repository/maven-public")
     google()
     mavenCentral()
     mavenLocal()

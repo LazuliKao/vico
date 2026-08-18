@@ -15,25 +15,33 @@
  */
 
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
   `dokka-convention`
   `publishing-convention`
-  id("com.android.kotlin.multiplatform.library")
-  alias(libs.plugins.composeMultiplatform)
+  id("com.android.library")
+  id("org.jetbrains.compose")
   id("org.jetbrains.kotlin.multiplatform")
   id("org.jetbrains.kotlin.plugin.compose")
 }
 
+android {
+  configure()
+  namespace = moduleNamespace
+}
+
 kotlin {
-  android {
-    configure()
-    namespace = moduleNamespace
+  androidTarget {
+    compilerOptions { jvmTarget = JvmTarget.JVM_11 }
+    publishLibraryVariants("release")
   }
-  listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
-    target.binaries.framework {
-      baseName = project.name
-      isStatic = true
+  if (System.getProperty("os.name").contains("Mac", ignoreCase = true)) {
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
+      target.binaries.framework {
+        baseName = project.name
+        isStatic = true
+      }
     }
   }
   jvm("desktop")
@@ -46,6 +54,7 @@ kotlin {
     browser()
     binaries.executable()
   }
+  ohosArm64()
   sourceSets {
     commonMain.dependencies {
       api(project(":vico:compose"))
