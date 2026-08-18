@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2025 by Patryk Goworowski and Patrick Michalik.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-object Versions {
-  const val COMPILE_SDK = 35
-  const val MIN_SDK = 23
-  const val VICO = "2.5.2-KBA"
-}
+package com.patrykandpatrick.vico.multiplatform.cartesian
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+
+@Composable internal actual fun Modifier.extraPointerInput(scrollState: VicoScrollState): Modifier = this

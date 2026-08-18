@@ -36,10 +36,12 @@ kotlin {
     compilerOptions { jvmTarget = JvmTarget.JVM_11 }
     publishLibraryVariants("release")
   }
-  listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
-    target.binaries.framework {
-      baseName = project.name
-      isStatic = true
+  if (System.getProperty("os.name").contains("Mac", ignoreCase = true)) {
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
+      target.binaries.framework {
+        baseName = project.name
+        isStatic = true
+      }
     }
   }
   jvm("desktop")
@@ -52,7 +54,17 @@ kotlin {
     browser()
     binaries.executable()
   }
+  ohosArm64()
   sourceSets {
+    val webMain by creating {
+      dependsOn(commonMain.get())
+    }
+    val jsMain by getting {
+      dependsOn(webMain)
+    }
+    val wasmJsMain by getting {
+      dependsOn(webMain)
+    }
     commonMain.dependencies {
       implementation(compose.foundation)
       implementation(compose.runtime)
@@ -63,5 +75,20 @@ kotlin {
     }
   }
   explicitApi()
-  compilerOptions { freeCompilerArgs.add("-Xannotation-default-target=param-property") }
+}
+
+configurations.matching {
+  it.name.contains("desktop", ignoreCase = true) ||
+  it.name.contains("jvm", ignoreCase = true) ||
+  it.name.contains("wasm", ignoreCase = true) ||
+  it.name.contains("js", ignoreCase = true)
+}.all {
+  resolutionStrategy.eachDependency {
+    if (requested.group.startsWith("org.jetbrains.compose") && requested.version?.contains("KBA") == true) {
+      useVersion("1.6.1")
+    }
+    if (requested.group == "org.jetbrains.kotlinx" && requested.name.startsWith("kotlinx-coroutines") && requested.version?.contains("KBA") == true) {
+      useVersion("1.8.0")
+    }
+  }
 }

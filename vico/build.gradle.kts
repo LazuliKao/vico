@@ -21,20 +21,12 @@ subprojects {
   version = Versions.VICO
 }
 
-dependencies {
-  dokka(project(":vico:compose"))
-  dokka(project(":vico:compose-m2"))
-  dokka(project(":vico:compose-m3"))
-  dokka(project(":vico:core"))
-  dokka(project(":vico:multiplatform"))
-  dokka(project(":vico:multiplatform-m2"))
-  dokka(project(":vico:multiplatform-m3"))
-  dokka(project(":vico:views"))
-}
 
-dokka {
-  pluginsConfiguration.html {
-    customStyleSheets.from("$rootDir/logo-styles.css")
-    footerMessage = "© 2025 Patryk Goworowski and Patrick Michalik"
-  }
+
+tasks.withType<org.jetbrains.dokka.gradle.DokkaMultiModuleTask>().configureEach {
+  pluginsMapConfiguration.set(
+    mapOf(
+      "org.jetbrains.dokka.base.DokkaBase" to """{ "customStyleSheets": ["$rootDir/logo-styles.css"], "footerMessage": "© 2025 Patryk Goworowski and Patrick Michalik" }"""
+    )
+  )
 }

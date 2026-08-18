@@ -36,10 +36,12 @@ kotlin {
     compilerOptions { jvmTarget = JvmTarget.JVM_11 }
     publishLibraryVariants("release")
   }
-  listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
-    target.binaries.framework {
-      baseName = project.name
-      isStatic = true
+  if (System.getProperty("os.name").contains("Mac", ignoreCase = true)) {
+    listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
+      target.binaries.framework {
+        baseName = project.name
+        isStatic = true
+      }
     }
   }
   jvm("desktop")
@@ -52,6 +54,7 @@ kotlin {
     browser()
     binaries.executable()
   }
+  ohosArm64()
   sourceSets {
     commonMain.dependencies {
       api(project(":vico:multiplatform"))

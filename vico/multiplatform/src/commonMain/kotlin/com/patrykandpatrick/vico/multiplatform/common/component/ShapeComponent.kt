@@ -21,10 +21,8 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.graphics.shadow.DropShadowPainter
-import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.graphics.withSave
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -61,17 +59,12 @@ public open class ShapeComponent(
 
   protected val path: Path = Path()
 
-  private val shadowPainters: List<DropShadowPainter> = getShadowPainters(shadows)
-
   internal val effectiveStrokeFill: Fill
     get() = if (strokeFill.color.alpha == 0f) fill else strokeFill
 
   init {
     require(strokeThickness >= 0.dp) { "`strokeThickness` must be nonnegative." }
   }
-
-  private fun getShadowPainters(shadows: List<Shadow>) =
-    shadows.map { DropShadowPainter(shape, it) }
 
   protected fun applyBrushes(size: Size) {
     fill.brush?.applyTo(size = size, p = paint, alpha = 1f)
@@ -98,11 +91,12 @@ public open class ShapeComponent(
       val height = adjustedBottom - adjustedTop
       applyBrushes(Size(width, height))
       shape.outline(density, layoutDirection, path, 0f, 0f, width, height)
-      if (shadowPainters.isNotEmpty()) {
-        with(mutableDrawScope) {
-          size = Size(width, height)
-          translate(adjustedLeft, adjustedTop) {
-            shadowPainters.forEach { with(it) { draw(size) } }
+      if (shadows.isNotEmpty()) {
+        shadows.forEach { shadow ->
+          canvas.withSave {
+            canvas.translate(adjustedLeft + shadow.offset.x, adjustedTop + shadow.offset.y)
+            val shadowPaint = Paint().apply { color = shadow.color }
+            canvas.drawPath(path, shadowPaint)
           }
         }
       }
